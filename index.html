@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #dff6ff;
+        }
+        .container {
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 110px);
+            grid-gap: 10px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 3px solid #444;
+            font-size: 28px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .cell:hover {
+            background: #f0f0f0;
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .restart-btn {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #00796b;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .restart-btn:hover {
+            background: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic-Tac-Toe</h1>
+        <div class="grid" id="gameGrid"></div>
+        <p class="message" id="message"></p>
+        <button class="restart-btn" onclick="restartGame()">Restart Game</button>
+    </div>
+    
+    <script>
+        let gameGrid = ["", "", "", "", "", "", "", "", ""];
+        let activePlayer = "X";
+        let isGameRunning = true;
+        
+        function renderGrid() {
+            const grid = document.getElementById("gameGrid");
+            grid.innerHTML = "";
+            gameGrid.forEach((cell, index) => {
+                let cellElement = document.createElement("div");
+                cellElement.classList.add("cell");
+                cellElement.innerText = cell;
+                cellElement.style.color = cell === "X" ? "red" : "blue";
+                cellElement.addEventListener("click", () => playerMove(index));
+                grid.appendChild(cellElement);
+            });
+        }
+
+        function playerMove(index) {
+            if (gameGrid[index] === "" && isGameRunning) {
+                gameGrid[index] = activePlayer;
+                renderGrid();
+                checkWinner();
+                activePlayer = activePlayer === "X" ? "O" : "X";
+            }
+        }
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            
+            for (let pattern of winPatterns) {
+                let [a, b, c] = pattern;
+                if (gameGrid[a] && gameGrid[a] === gameGrid[b] && gameGrid[a] === gameGrid[c]) {
+                    isGameRunning = false;
+                    document.getElementById("message").innerText = "🎉 " + gameGrid[a] + " Wins! 🎉";
+                    return;
+                }
+            }
+            
+            if (!gameGrid.includes("")) {
+                document.getElementById("message").innerText = "😮 It's a Draw! Try again!";
+                isGameRunning = false;
+            }
+        }
+
+        function restartGame() {
+            gameGrid = ["", "", "", "", "", "", "", "", ""];
+            activePlayer = "X";
+            isGameRunning = true;
+            document.getElementById("message").innerText = "New Round Started! 🚀";
+            renderGrid();
+        }
+        
+        renderGrid();
+    </script>
+</body>
+</html>
+
+</body>
+</html>
